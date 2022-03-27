@@ -53,5 +53,9 @@
 				"pagePath": "pages/me/me"
 			}
 		]
+	},
+	 // 配置easycom组件模式 uview-ui 按需引入
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	}
 }
