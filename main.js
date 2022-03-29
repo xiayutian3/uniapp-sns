@@ -6,6 +6,9 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 App.mpType = 'app'
 
+//服務器文件的基礎信息
+Vue.prototype.BaseFileURL = 'http://ts.lagou.uieee.com/api/v2/files/'
+
 Vue.use(uView)
 const app = new Vue({
     ...App

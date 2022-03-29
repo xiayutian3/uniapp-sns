@@ -1,49 +1,139 @@
 <template>
 	<view id="index">
-				<!-- 页面 header 相关部分 -->
-				<view class="header-box">
-					<!-- 顶部广告位轮播图 -->
-					<swiper class="swiper" :indicator-dots="false" :autoplay="true" :interval="2500" :duration="500">
-						<swiper-item>
-							<navigator :url="'/pages/webview/webview?url='+ encodeURI('https://www.baidu.com/')" open-type="navigate">
-								<image class="banner-swiper-img" src="@/static/logo.png" mode="aspectFill" />
-							</navigator>
-						</swiper-item>
-						<swiper-item>
-								<image class="banner-swiper-img" src="@/static/logo.png" mode="aspectFill" />
-						</swiper-item>
-					</swiper>
-					<!-- 遮罩使用弧形框 -->
-					<image class="crile" src="@/static/crile.png" mode="aspectFill" />
-					<!-- 两个选项按钮 -->
-					<view class="card-header">
-						<view class="card-one card-left" @tap="gotoTab('/pages/feeds/feeds')">
-							<image class="img" src="@/static/coffee.png" mode="aspectFill" />
-							<view class="iright">
-								<view class="title">精彩动态</view>
-							</view>
-						</view>
-						<view class="card-one card-right" @tap="gotoTab('/pages/me/me')">
-							<image class="img" src="@/static/ran.png" mode="aspectFill" />
-							<view class="iright">
-								<view class="title">个人中心</view>
-							</view>
-						</view>
+		<!-- 页面 header 相关部分 -->
+		<view class="header-box">
+			<!-- 顶部广告位轮播图 -->
+			<swiper class="swiper" :indicator-dots="false" :autoplay="true" :interval="2500" :duration="500">
+				<swiper-item>
+					<navigator :url="'/pages/webview/webview?url='+ encodeURI('https://www.baidu.com/')"
+						open-type="navigate">
+						<image class="banner-swiper-img" src="@/static/logo.png" mode="aspectFill" />
+					</navigator>
+				</swiper-item>
+				<swiper-item>
+					<image class="banner-swiper-img" src="@/static/logo.png" mode="aspectFill" />
+				</swiper-item>
+			</swiper>
+			<!-- 遮罩使用弧形框 -->
+			<image class="crile" src="@/static/crile.png" mode="aspectFill" />
+			<!-- 两个选项按钮 -->
+			<view class="card-header">
+				<view class="card-one card-left" @tap="gotoTab('/pages/feeds/feeds')">
+					<image class="img" src="@/static/coffee.png" mode="aspectFill" />
+					<view class="iright">
+						<view class="title">精彩动态</view>
 					</view>
-		
-					<!-- Tab 选项卡 -->
-					<view class="tabs-box">
-						<view class="one-nav">推荐</view>
-						<view class="one-nav">资讯</view>
-					</view>
-		
 				</view>
-		
+				<view class="card-one card-right" @tap="gotoTab('/pages/me/me')">
+					<image class="img" src="@/static/ran.png" mode="aspectFill" />
+					<view class="iright">
+						<view class="title">个人中心</view>
+					</view>
+				</view>
+			</view>
+
+			<!-- Tab 选项卡 -->
+			<view class="tabs-box">
+				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' " @tap="swiperChange(0)">推荐
+				</view>
+				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' " @tap="swiperChange(1)">资讯
+				</view>
+			</view>
+
+		</view>
+
+		<!-- 内容轮播导航实现 -->
+		<swiper class="swiper-box" :style=" 'height:'+ swiperSliderHeight " :current="currentSwiperIndex"
+			@animationfinish="swiperSlider">
+			<swiper-item class="swiper-item">
+				<view class="page-item sns-now">
+					<view class="feeds-box">
+						<waterfall-sns v-model="feedsList" ref="waterfall">
+							<template v-slot:left="{leftList}">
+								<view class="feed-one" v-for="(item, index) in leftList" :key="index">
+									<navigator open-type="navigate" :url=" '/subpages/feedinfo/feedinfo?id=' + item.id">
+										<image class="feed-img" :src="item.cover" mode="widthFix" :lazy-load="true" />
+										<view class="u-line-2 feed-title" v-if="!!item.feed_content">
+											{{ item.feed_content }}
+										</view>
+										<view class="feed-info">
+											<view class="iview">
+												<image class="avatar" :src=" item.avatar" />
+												<text class="name u-line-1">{{ item.name }}</text>
+											</view>
+											<view class="iview">
+												<view class="ilike" @tap.stop="clickLove(item)">
+													<image v-if="item.has_like" src="@/static/lover.png"
+														class="micon" />
+													<image v-else src="@/static/love.png" class="micon" />
+													<text class="love-count"
+														v-if="item.like_count>0">{{ item.like_count }}</text>
+												</view>
+											</view>
+										</view>
+									</navigator>
+								</view>
+							</template>
+							<template v-slot:right="{rightList}">
+								<view class="feed-one" v-for="(item, index) in rightList" :key="index">
+									<navigator open-type="navigate" :url=" '/subpages/feedinfo/feedinfo?id=' + item.id">
+										<image class="feed-img" :src="item.cover" mode="widthFix" :lazy-load="true" />
+										<view class="u-line-2 feed-title" v-if="!!item.feed_content">
+											{{ item.feed_content }}
+										</view>
+										<view class="feed-info">
+											<view class="iview">
+												<image class="avatar" :src=" item.avatar" />
+												<text class="name u-line-1">{{ item.name }}</text>
+											</view>
+											<view class="iview">
+												<view class="ilike" @tap.stop="clickLove(item)">
+													<image v-if="item.has_like" src="@/static/lover.png"
+														class="micon" />
+													<image v-else src="@/static/love.png" class="micon" />
+													<text class="love-count"
+														v-if="item.like_count>0">{{ item.like_count }}</text>
+												</view>
+											</view>
+										</view>
+									</navigator>
+								</view>
+							</template>
+						</waterfall-sns>
+					</view>
+				</view>
+			</swiper-item>
+			<swiper-item class="swiper-item sns-news">
+				<view v-for="(item, index) in newsList" :key="index">
+					<navigator class="one-new" open-type="navigate" :url=" '/subpages/newinfo/newinfo?id=' + item.id">
+						<view class="left">
+							<view class="title u-line-2">{{item.title}}</view>
+							<view class="uinfo">
+								<view class="iview">
+									<view class="utime">
+										<text class="name">{{ item.author }}</text>
+									</view>
+								</view>
+								<text class="uptime">{{ item.created_at | timeFormate }}发布</text>
+							</view>
+						</view>
+						<view class="right">
+							<image class="pic" mode="aspectFill" :src="item.cover" />
+						</view>
+					</navigator>
+				</view>
+			</swiper-item>
+		</swiper>
+
 	</view>
 </template>
 
 <script>
-	import {getTestData} from '@/config/api.js'
+	import {
+		getTestData,
+		getFeeds,
+		getNews
+	} from '@/config/api.js'
 	export default {
 		data() {
 			return {
@@ -67,15 +157,69 @@
 			}
 		},
 		onLoad() {
-			getTestData().then(res=>{
-				console.log('res',res)
+			//測試接口數據
+			getTestData().then(res => {
+				console.log('res', res)
 			})
+			// 我们要在这里初始化请求相关数据
+			this.getFeedsList()
+			this.getNewsList()
 		},
 		methods: {
 			//tab頁面跳轉
-			gotoTab(url){
+			gotoTab(url) {
 				uni.switchTab({
 					url
+				})
+			},
+			// 点击按钮实现切换效果
+			swiperChange(index) {
+				if (index === 0) {
+					this.swiperSliderHeight = this.swiperSliderFeedsHeight
+					// uni.pageScrollTo({
+					// 	duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+					// 	scrollTop: this.oldFeedsScrollTop, //滚动到目标位置
+					// })
+				} else {
+					this.swiperSliderHeight = this.swiperSliderNewsHeight
+					// uni.pageScrollTo({
+					// 	duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+					// 	scrollTop: this.oldNewsScrollTop, //滚动到目标位置
+					// })
+				}
+				this.currentSwiperIndex = index
+			},
+			// 页面滑动左右分页的时候实现的效果
+			swiperSlider(event) {
+				let index = event.detail.current
+				if (index === 0) {
+					this.swiperSliderHeight = this.swiperSliderFeedsHeight
+				} else {
+					this.swiperSliderHeight = this.swiperSliderNewsHeight
+				}
+				this.currentSwiperIndex = index
+
+			},
+			// 请求 feeds 列表数据
+			async getFeedsList() {
+				let feeds = await getFeeds()
+				this.feedsList = feeds.data.feeds.map(item => {
+					return {
+						...item,
+						cover: this.BaseFileURL + item.images[0].file,
+						avatar: !!item.user.avatar ? item.user.avatar.url : '/static/nopic.png',
+						name: item.user.name,
+					}
+				})
+			},
+			// 请求资讯列表数据
+			async getNewsList() {
+				let news = await getNews()
+				this.newsList = news.data.map(item => {
+					return {
+						...item,
+						cover: this.BaseFileURL + item.image.id
+					}
 				})
 			}
 		}
