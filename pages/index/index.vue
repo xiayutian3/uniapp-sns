@@ -1,5 +1,17 @@
 <template>
 	<view id="index">
+
+		<!-- navbar -->
+		<u-navbar v-if="navBarShowTag">
+			<view class="tabs-box" slot="center">
+				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' " @tap="swiperChange(0)">推荐
+				</view>
+				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' " @tap="swiperChange(1)">资讯
+				</view>
+			</view>
+		</u-navbar>
+
+
 		<!-- 页面 header 相关部分 -->
 		<view class="header-box">
 			<!-- 顶部广告位轮播图 -->
@@ -40,10 +52,12 @@
 				</view>
 			</view>
 
+
 		</view>
 
+
 		<!-- 内容轮播导航实现 -->
-		<swiper class="swiper-box" :style=" 'height:'+ swiperSliderHeight " :current="currentSwiperIndex"
+		<swiper class="swiper-box" :style=" 'height: 1000px' " :current="currentSwiperIndex"
 			@animationfinish="swiperSlider">
 			<swiper-item class="swiper-item">
 				<view class="page-item sns-now">
@@ -156,6 +170,30 @@
 				oldNewsScrollTop: 0
 			}
 		},
+		//下拉刷新
+		onPullDownRefresh(){
+			//
+		},
+		// 滑動到最底部,觸發加載數據更多
+		onReachBottom(){
+			//
+		},
+		//監聽頁面滾動事件
+		onPageScroll(event) {
+			//那個分頁下邊，記住滾動到的位置
+			if (this.currentSwiperIndex === 0) {
+				this.oldFeedsScrollTop = event.scrollTop
+			} else {
+				this.oldNewsScrollTop = event.scrollTop
+			}
+
+
+			if (event.scrollTop > 220) {
+				this.navBarShowTag = true
+			} else {
+				this.navBarShowTag = false
+			}
+		},
 		onLoad() {
 			//測試接口數據
 			getTestData().then(res => {
@@ -176,16 +214,16 @@
 			swiperChange(index) {
 				if (index === 0) {
 					this.swiperSliderHeight = this.swiperSliderFeedsHeight
-					// uni.pageScrollTo({
-					// 	duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
-					// 	scrollTop: this.oldFeedsScrollTop, //滚动到目标位置
-					// })
+					uni.pageScrollTo({
+						duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+						scrollTop: this.oldFeedsScrollTop, //滚动到目标位置
+					})
 				} else {
 					this.swiperSliderHeight = this.swiperSliderNewsHeight
-					// uni.pageScrollTo({
-					// 	duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
-					// 	scrollTop: this.oldNewsScrollTop, //滚动到目标位置
-					// })
+					uni.pageScrollTo({
+						duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+						scrollTop: this.oldNewsScrollTop, //滚动到目标位置
+					})
 				}
 				this.currentSwiperIndex = index
 			},
@@ -194,8 +232,16 @@
 				let index = event.detail.current
 				if (index === 0) {
 					this.swiperSliderHeight = this.swiperSliderFeedsHeight
+					uni.pageScrollTo({
+						duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+						scrollTop: this.oldFeedsScrollTop, //滚动到目标位置
+					})
 				} else {
 					this.swiperSliderHeight = this.swiperSliderNewsHeight
+					uni.pageScrollTo({
+						duration: 0, //过渡时间必须为0，uniapp bug，否则运行到手机会报错
+						scrollTop: this.oldNewsScrollTop, //滚动到目标位置
+					})
 				}
 				this.currentSwiperIndex = index
 
@@ -203,7 +249,7 @@
 			// 请求 feeds 列表数据
 			async getFeedsList() {
 				let feeds = await getFeeds()
-				this.feedsList = feeds.data.feeds.map(item => {
+				let feedsList = feeds.data.feeds.map(item => {
 					return {
 						...item,
 						cover: this.BaseFileURL + item.images[0].file,
@@ -211,16 +257,20 @@
 						name: item.user.name,
 					}
 				})
+				//多次請求添加數據(追加)
+				this.feedsList = [...this.feedsList,...feedsList]
 			},
 			// 请求资讯列表数据
 			async getNewsList() {
 				let news = await getNews()
-				this.newsList = news.data.map(item => {
+				let newsList = news.data.map(item => {
 					return {
 						...item,
 						cover: this.BaseFileURL + item.image.id
 					}
 				})
+				//多次請求添加數據(追加)
+				this.newsList = [...this.newsList,...newsList]
 			}
 		}
 	}

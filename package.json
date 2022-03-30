@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@dcloudio/uni-ui": "^1.4.12",
     "uview-ui": "^2.0.29"
   }
 }

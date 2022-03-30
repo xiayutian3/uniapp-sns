@@ -5,39 +5,48 @@
 			"style": {
 				// "navigationBarTitleText": "uni-app",
 				// custorm 取消顶部的 navBar 显示
-				"navigationStyle":"custom",
+				"navigationStyle": "custom",
 				//是否頁面可以下拉
 				"enablePullDownRefresh": true
 			}
+		}, {
+			"path": "pages/feeds/feeds",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/me/me",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/webview/webview",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/feeds/feeds",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/me/me",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/webview/webview",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
+	//分包配置
+	"subPackages": [{
+		//根目錄
+		"root": "subpages",
+		//頁面配置
+		"pages": [{
+			"path": "feedinfo/feedinfo",
+			"style": {
+				"navigationBarTitleText": "动态详情",
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"backgroundColor": "#FFFFFF"
+			}
+		}]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -67,8 +76,10 @@
 			}
 		]
 	},
-	 // 配置easycom组件模式 uview-ui 按需引入
+	// 配置easycom组件模式 uview-ui 按需引入
 	"easycom": {
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		// // uni-ui 规则如下配置
+		// "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
 	}
 }
