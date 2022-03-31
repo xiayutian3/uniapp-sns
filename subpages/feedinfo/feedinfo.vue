@@ -15,15 +15,15 @@
 			</view>
 		</view>
 		<view class="line" />
-		<comment :oneInfo="feedInfo" type="feed" />
+		<!-- <comment :oneInfo="feedInfo" type="feed" /> -->
 	</view>
 </template>
 
 <script>
-	// 引入 时间日期格式化显示函数
-	import timeFrom from '@/tools/timeFrom.js'
-	// 引入 评论插件
-	import comment from '@/components/comment/comment.vue'
+	// // 引入 时间日期格式化显示函数
+	// import timeFrom from '@/tools/timeFrom.js'
+	// // 引入 评论插件
+	// import comment from '@/components/comment/comment.vue'
 	export default {
 		data() {
 			return {
@@ -33,9 +33,9 @@
 				feedInfo: {}
 			}
 		},
-		components: {
-			comment
-		},
+		// components: {
+		// 	comment
+		// },
 		async onLoad(params) {
 			// #ifdef MP-WEIXIN
 			// 微信条件下分享到朋友圈、群组

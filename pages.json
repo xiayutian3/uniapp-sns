@@ -45,7 +45,16 @@
 				"navigationBarTextStyle": "black",
 				"backgroundColor": "#FFFFFF"
 			}
-		}]
+		}    ,{
+                    "path" : "newinfo/newinfo",
+                    "style" :                                                                                    
+                {
+                    // custorm 取消顶部的 navBar 显示
+                    "navigationStyle": "custom"
+                }
+                
+                }
+            ]
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
