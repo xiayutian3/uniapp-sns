@@ -3,6 +3,8 @@ import uView from 'uview-ui'
 
 // #ifndef VUE3
 import Vue from 'vue'
+// 引入 store 
+import store from '@/store/index.js'
 Vue.config.productionTip = false
 App.mpType = 'app'
 
@@ -14,7 +16,8 @@ Vue.component("login", login);
 
 Vue.use(uView)
 const app = new Vue({
-    ...App
+    ...App,
+	store
 })
 app.$mount()
 // #endif

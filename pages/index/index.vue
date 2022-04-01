@@ -139,10 +139,23 @@
 			</swiper-item>
 		</swiper>
 
+
+		<!-- 分享按钮组件 -->
+		<goto-share />
+
+		<!-- 登陆组件 -->
+		<login ref="login" />
+
+
+
 	</view>
 </template>
 
 <script>
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	import {
 		getTestData,
 		getFeeds,
@@ -170,12 +183,15 @@
 				oldNewsScrollTop: 0
 			}
 		},
+		computed: {
+			...mapState(['loginState', 'userInfo'])
+		},
 		//下拉刷新
-		onPullDownRefresh(){
+		onPullDownRefresh() {
 			//
 		},
 		// 滑動到最底部,觸發加載數據更多
-		onReachBottom(){
+		onReachBottom() {
 			//
 		},
 		//監聽頁面滾動事件
@@ -195,6 +211,17 @@
 			}
 		},
 		onLoad() {
+
+			//用戶登錄完成
+			uni.$on('indexUserLogin', () => {
+				this.currentSwiperIndex = 0
+				this.feedsList = []
+				this.$refs.waterfall.clear()
+				this.getFeedsList()
+			})
+
+
+
 			//測試接口數據
 			getTestData().then(res => {
 				console.log('res', res)
@@ -258,7 +285,7 @@
 					}
 				})
 				//多次請求添加數據(追加)
-				this.feedsList = [...this.feedsList,...feedsList]
+				this.feedsList = [...this.feedsList, ...feedsList]
 			},
 			// 请求资讯列表数据
 			async getNewsList() {
@@ -270,7 +297,7 @@
 					}
 				})
 				//多次請求添加數據(追加)
-				this.newsList = [...this.newsList,...newsList]
+				this.newsList = [...this.newsList, ...newsList]
 			}
 		}
 	}
