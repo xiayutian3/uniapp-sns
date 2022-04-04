@@ -4,7 +4,17 @@ const Http = (vm) => {
 	uni.$u.http.setConfig((config) => {
 		/* config 为默认全局配置*/
 		// config.baseURL = 'https://www.example.com'; /* 根域名 */
-		config.baseURL = ''
+		
+		//h5环境下需要配置跨域的问题，不是h5下就不用
+		
+		// #ifdef H5
+			config.baseURL = ''  //请求基本路径地址
+		// #endif
+		// #ifndef H5
+			config.baseURL = 'http://47.265.23.15/api/v2'  //生产地址
+		// #endif
+		
+		// config.baseURL = ''
 		return config
 	})
 

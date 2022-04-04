@@ -71,5 +71,22 @@
     "uniStatistics" : {
         "enable" : false
     },
+	"h5":{  // h5的跨域配置
+		"devServer":{
+			"port":8000, //端口
+			"disableHostCheck":true,
+			"proxy":{
+				// 使用代理
+				"/api":{
+					"target":"http://47.265.23.15/api/v2",
+					"changeOrigin":true,
+					"pathRewrite":{
+						"^/api":""
+					}
+				}
+			}
+		},
+		"title":"项目测试标题"
+	},
     "vueVersion" : "2"
 }

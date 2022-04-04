@@ -67,6 +67,19 @@
                 }
                 
                 }
+                ,{
+                    "path" : "share/share",
+                    "style" :                                                                                    
+                {
+                    // "navigationBarTitleText": "",
+                    // "enablePullDownRefresh": false
+					"navigationBarTitleText": "动态分享",
+					"navigationBarBackgroundColor": "#FFFFFF",
+					"navigationBarTextStyle": "black",
+					"backgroundColor": "#FFFFFF"
+                }
+                
+                }
             ]
 	}],
 	"globalStyle": {
